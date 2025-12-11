@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %} 
+
+{% block title %}Book a Table - Mirano{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
+    color: #333;
+  }
+
+  .logo-img {
+    width: 70px;
+    height: auto;
+    margin-right: 10px;
+    padding: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .reservation-container {
+    max-width: 700px;
+    margin: 5rem auto;
+    padding: 2rem;
+    background-color: #a76a50ff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    color: #FFFFD1;
+  }
+
+  .reservation-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #FFFFD1;
+  }
+
+  .reservation-container p {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #fff4b8;
+  }
+
+  .reservation-container form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 2rem;
+  }
+
+  .reservation-container form .full-width {
+    grid-column: span 2;
+  }
+
+  .reservation-container label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  .reservation-container input,
+  .reservation-container select,
+  .reservation-container textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 1rem;
+  }
+
+  .reservation-container textarea {
+    resize: vertical;
+  }
+
+  .reservation-container button {
+    grid-column: span 2;
+    background-color: #FFFFD1;
+    color: #5D2913;
+    padding: 0.9rem 1.5rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .reservation-container button:hover {
+    background-color: #fff4b8;
+    transform: translateY(-2px);
+  }
+
+  .flash-message {
+    grid-column: span 2;
+    text-align: center;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .flash-success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  .flash-error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  /* Optional styling for searchable dropdown */
+  .menu-search {
+    width: 100%;
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+  }
+</style>
+
+<div class="reservation-container">
+    <h2>Reserve Your Table</h2>
+    <p>Plan ahead for the perfect dining experience. Book a table today!</p>
+
+    {# Flash Messages #}
+    {% for message in app.flashes('success') %}
+        <div class="flash-message flash-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="flash-message flash-error">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.guest) }}
+        {{ form_row(form.date) }}
+        <div class="full-width">
+        {{ form_row(form.menu) }}
+        </div>
+        <div class="full-width">
+            {{ form_row(form.message) }}
+        </div>
+        <button type="submit">Reserve Now</button>
+    {{ form_end(form) }}
+</div>
+
+{# ✅ Enable searchable dropdown using Select2 #}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('.menu-search').select2({
+      placeholder: "Search for a dish (optional)",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+{% endblock %}

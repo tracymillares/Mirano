@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order Success - Mirano{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
+    color: #5D2913;
+    text-align: center;
+    padding: 4rem 2rem;
+  } 
+
+      .logo-img {
+      width: 70px;
+      height: auto;
+      margin-right: 10px;
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+
+  .success-box {
+    background: white;
+    display: inline-block;
+    padding: 2rem 3rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .success-box h1 {
+    color: #b23a48;
+    margin-bottom: 1rem;
+  }
+
+  .success-box p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-btn {
+    display: inline-block;
+    background-color: #b23a48;
+    color: white;
+    padding: 0.7rem 1.8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-btn:hover {
+    background-color: #7e3b1b;
+  }
+</style>
+
+<div class="success-box">
+  <h1>🎉 Order Placed Successfully!</h1>
+  <p>Thank you for your order, {{ order.customerName|default('Customer') }}.  
+     We’ll start preparing it right away!</p>
+  <a href="{{ path('app_mirano') }}" class="back-btn">← Back to Menu</a>
+</div>
+{% endblock %}

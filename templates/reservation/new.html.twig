@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block body %}
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff8f5;
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+    }
+
+    .reservation-section {
+      max-width: 700px;
+      margin: 5rem auto;
+      background: #ffffff;
+      padding: 3rem 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .reservation-section h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 2rem;
+      color: #5D2913;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    form label {
+      display: block;
+      font-weight: 600;
+      color: #5D2913;
+      margin-bottom: 0.5rem;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #d9c7b5;
+      border-radius: 8px;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+      background-color: #fffdf8;
+      transition: border-color 0.3s ease;
+    }
+
+    form input:focus, form textarea:focus {
+      outline: none;
+      border-color: #5D2913;
+      box-shadow: 0 0 0 3px rgba(93,41,19,0.1);
+    }
+
+    .submit-btn {
+      background-color: #5D2913;
+      color: #FFFFD1;
+      padding: 0.9rem 2.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      background-color: #7e3b1b;
+      transform: translateY(-2px);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background-color: #6075d3;
+      color: #FFFFD1;
+      padding: 0.7rem 1.8rem;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #8396e9ff;
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <section class="reservation-section">
+    <h1>Create A Reservation</h1>
+
+    {{ include('reservation/_form.html.twig') }}
+
+    <a href="{{ path('app_reservation_index') }}" class="back-btn">Back to List</a>
+  </section>
+{% endblock %}

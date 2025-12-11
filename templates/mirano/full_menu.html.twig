@@ -1,0 +1,349 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Full Menu — Mirano{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
+    color: #5D2913;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 🌸 TOP NAVBAR */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 1.5rem;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    z-index: 1100;
+  }
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo-img {
+    width: 60px;
+    height: auto;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .logo-text {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    color: #5D2913;
+    font-size: 1.6rem;
+  }
+
+  .logo-link:hover .logo-img {
+    transform: scale(1.1);
+  }
+
+  .menu-page {
+    text-align: center;
+    padding: 6rem 2rem;
+  }
+
+  .menu-page h1 {
+    font-family: 'Merriweather', serif;
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    color: #5D2913;
+  }
+
+  .menu-page p {
+    color: #6b4a3b;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  /* 🔍 Search bar */
+  .search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .search-bar input {
+    width: 60%;
+    padding: 0.8rem 1.2rem;
+    border: 1px solid #e4c7b7;
+    border-radius: 25px;
+    outline: none;
+    font-size: 1rem;
+    color: #5D2913;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+  }
+
+  .search-bar input:focus {
+    border-color: #b23a48;
+    box-shadow: 0 3px 8px rgba(178, 58, 72, 0.2);
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  .menu-card {
+    background: white;
+    border: 1px solid #f3e0d6;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+  }
+
+  .menu-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  .menu-card h3 {
+    font-family: 'Merriweather', serif;
+    color: #5D2913;
+    margin-bottom: 0.4rem;
+  }
+
+  .menu-card .category {
+    color: #a87354;
+    font-style: italic;
+    margin-bottom: 0.6rem;
+  }
+
+  .menu-card .price {
+    color: #b23a48;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .menu-card .description {
+    color: #6b4a3b;
+    font-size: 0.9rem;
+    margin-top: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .menu-avatar {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50px;
+    margin: 0 auto 1rem;
+    display: block;
+    border: 2px solid #f0d6c0;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-top: 3rem;
+    background-color: #5D2913;
+    color: #FFFFD1;
+    padding: 0.9rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .back-btn:hover {
+    background-color: #7e3b1b;
+    transform: translateY(-3px);
+  }
+
+  /* 🌸 MODAL STYLE */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(3px);
+  }
+
+  .modal-content {
+    background-color: #fff8f5;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  .close {
+    color: #b23a48;
+    float: right;
+    font-size: 1.8rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: #7e3b1b;
+  }
+
+  .order-btn {
+  display: inline-block;
+  background-color: #b23a48;
+  color: #fff8f5;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.order-btn:hover {
+  background-color: #7e3b1b;
+  transform: translateY(-3px);
+}
+
+</style>
+
+<nav>
+  <a href="{{ path('app_mirano') }}" class="logo-link">
+    <img src="{{ asset('images/Screenshot_2025-10-11_215348-removebg-preview.png') }}" alt="Mirano Logo" class="logo-img">
+    <span class="logo-text">Mirano</span>
+  </a>
+</nav>
+
+<section class="menu-page">
+  <h1>🍽️ Our Full Menu</h1>
+  <p>Explore all our handcrafted dishes — from appetizers to desserts.</p>
+
+  <!-- 🔍 SEARCH BAR -->
+  <div class="search-bar">
+    <input type="text" id="menuSearch" placeholder="Search for a dish, category, or price..." />
+  </div>
+
+  {% if menus is not empty %}
+    <div class="menu-grid" id="menuGrid">
+      {% for menu in menus %}
+        <div class="menu-card"
+            data-name="{{ menu.name|lower }}"
+            data-category="{{ menu.category|lower }}"
+            data-description="{{ menu.description|lower }}">
+          {% if menu.image %}
+            <img src="{{ asset('uploads/images/' ~ menu.image) }}" alt="{{ menu.name }}" class="menu-avatar">
+          {% else %}
+            <img src="{{ asset('images/default-food.png') }}" alt="Default Image" class="menu-avatar">
+          {% endif %}
+          <h3>{{ menu.name }}</h3>
+          <p class="category">{{ menu.category }}</p>
+          <p class="price">₱{{ menu.price|number_format(2, '.', ',') }}</p>
+          <p class="description">{{ menu.description|default('No description available') }}</p>
+          <!-- 🍴 Order Now Button -->
+          <a href="{{ path('app_order', {'id': menu.id}) }}" class="order-btn">Order Now</a>
+        </div>
+
+        
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No menu items available yet.</p>
+  {% endif %}
+
+  <a href="{{ path('app_mirano') }}" class="back-btn">← Back to Home</a>
+</section>
+
+<!-- 🌸 MODAL TEMPLATE -->
+<div id="menuModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalName"></h2>
+    <p id="modalCategory" class="category"></p>
+    <p id="modalPrice" class="price"></p>
+    <hr style="margin: 1rem 0; border: 0.5px solid #f3e0d6;">
+    <p id="modalDescription" style="color:#5D2913; font-size:1rem;"></p>
+  </div>
+</div>
+
+<script>
+  // 🌸 Modal handling
+  const modal = document.getElementById('menuModal');
+  const closeBtn = document.querySelector('.close');
+  const cards = document.querySelectorAll('.menu-card');
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      document.getElementById('modalName').textContent = card.querySelector('h3').textContent;
+      document.getElementById('modalCategory').textContent = card.querySelector('.category').textContent;
+      document.getElementById('modalPrice').textContent = card.querySelector('.price').textContent;
+      document.getElementById('modalDescription').textContent = card.querySelector('.description').textContent;
+      modal.style.display = 'block';
+    });
+  });
+
+  closeBtn.onclick = () => modal.style.display = 'none';
+  window.onclick = (e) => { if (e.target == modal) modal.style.display = 'none'; };
+
+  // 🔍 Search functionality
+  const searchInput = document.getElementById('menuSearch');
+  const menuGrid = document.getElementById('menuGrid');
+
+  searchInput.addEventListener('keyup', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const items = menuGrid.querySelectorAll('.menu-card');
+    let visible = 0;
+
+    items.forEach(item => {
+      const name = item.dataset.name;
+      const category = item.dataset.category;
+      const desc = item.dataset.description;
+
+      if (name.includes(searchTerm) || category.includes(searchTerm) || desc.includes(searchTerm)) {
+        item.style.display = 'flex';
+        visible++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    if (visible === 0) {
+      menuGrid.innerHTML = '<p style="grid-column: 1 / -1; color:#6b4a3b;">No matching menu items found.</p>';
+    }
+  });
+</script>
+{% endblock %}

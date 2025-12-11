@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thank You{% endblock %}
+
+{% block body %}
+<div style="text-align:center; margin-top:5rem;">
+    <h2>Thank you for your reservation!</h2>
+    <p>We have received your booking and will contact you shortly.</p>
+    <a href="{{ path('app_reservation_book') }}">Book another table</a>
+</div>
+{% endblock %}

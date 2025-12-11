@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mirano Restaurant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* === GLOBAL STYLES === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff8f5;
+      color: #333;
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Merriweather', serif;
+    }
+
+    /* === NAVBAR === */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0.4rem 1.5rem;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    nav.scrolled {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 70px;
+      height: auto;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #5D2913;
+      letter-spacing: 1px;
+      font-family: 'Merriweather', serif;
+    }
+
+    .logo-link:hover .logo-img {
+      transform: scale(1.1);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: #5D2913;
+      font-weight: 500;
+      position: relative;
+      font-size: 1rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 2px;
+      background-color: #b23a48;
+      transition: width 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .nav-links a:hover {
+      color: #b23a48;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: #b23a48;
+    }
+
+     /* Sign In Button Styling */
+    .nav-links .signin-btn {
+      background-color: #5D2913;
+      color: #FFFFD1;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links .signin-btn:hover {
+      background-color: #b23a48;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+
+    /* === HERO SECTION === */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 8rem 2rem;
+      overflow: hidden;
+      background: linear-gradient(120deg, #fff0eb, #ffe6e0);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('images/Prêt à vous perdre dans une aventure gastronomique extraordinaire _ 🌍🍽️.jpg') center/cover no-repeat;
+      opacity: 1;
+      z-index: 0;
+      filter: brightness(1);
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(93, 41, 19, 0.35);
+      z-index: 0;
+    }
+
+    header h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 3.5rem;
+      color: #FFFFD1;
+      margin-bottom: 1rem;
+      text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    header p {
+      position: relative;
+      z-index: 1;
+      color: #FFFFD1;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-btn {
+      position: relative;
+      z-index: 1;
+      background-color: #FFFFD1;
+      color: #5D2913;
+      padding: 0.9rem 2.5rem;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      border: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .hero-btn:hover {
+      background-color: #fff4b8;
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
+
+    /* === ABOUT SECTION === */
+    section {
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    #about {
+      background-color: #fff;
+    }
+
+    #about h2 {
+      color: #5D2913;
+      margin-bottom: 1.2rem;
+      font-size: 2rem;
+    }
+
+    #about .intro {
+      max-width: 800px;
+      margin: auto;
+      color: #555;
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Services grid inside About */
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .service-card {
+      background-color: #5D2913;
+      border: 1px solid #f0dfcf;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .service-card h3 {
+      color: #fff4b8;
+      margin-bottom: 0.8rem;
+      font-size: 1.3rem;
+    }
+
+    .service-card p {
+      color: #fff4b8;
+      font-size: 1rem;
+    }
+
+     .service-card:hover {
+      background-color: #813d20ff;
+      transform: translateY(-4px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+
+     }
+
+    /* === MENU SECTION === */
+    #menu {
+      background-color: #fff8f5;
+    }
+
+    #menu h2 {
+      color: #5D2913;
+      margin-bottom: 2.5rem;
+      font-size: 2rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .menu-item {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .menu-item h3 {
+      color: #5D2913;
+      margin-bottom: 0.6rem;
+      font-size: 1.4rem;
+    }
+
+    .menu-item p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .menu-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 1rem;
+  border: 3px solid #f3e0d6;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+    .description {
+  color: #6b4a3b;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+
+    .see-more-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.see-more-btn {
+  background-color: #5D2913;
+  color: #FFFFD1;
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.see-more-btn:hover {
+  background-color: #7e3b1b;
+  transform: translateY(-3px);
+}
+
+/* hide overflow menus by default */
+.menu-card.hidden {
+  display: none;
+}
+
+
+     /* === RESERVATION SECTION === */
+    #reservation {
+      background-color: #fff8f5;
+    }
+
+    .reservation-card {
+      background-color: #5D2913;
+      color: #FFFFD1;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    #reservation h2 {
+     color: #5D2913;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+     }
+
+    .reservation-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .reservation-card p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .reservation-card a {
+      display: inline-block;
+      background-color: #FFFFD1;
+      color: #5D2913;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .reservation-card a:hover {
+      background-color: #fff4b8;
+      transform: translateY(-3px);
+    }
+
+
+    /* === CONTACT SECTION === */
+    #contact {
+      background-color: #ffffff;
+    }
+
+    #contact h2 {
+      color: #5D2913;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    #contact p {
+      color: #555;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    /* === FOOTER === */
+    footer {
+      background-color: #5D2913;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      header h1 {
+        font-size: 2.4rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      .hero-btn {
+        padding: 0.8rem 2rem;
+      }
+    }
+
+    
+  </style>
+</head>
+
+<body>
+  <!-- 🌸 NAVIGATION -->
+  <nav>
+    <div class="nav-container">
+      <a href="#about" class="logo-link">
+        <img src="images/Screenshot_2025-10-11_215348-removebg-preview.png" alt="Mirano Logo" class="logo-img">
+        <span class="logo-text">Mirano</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#reservation">Reservation</a>
+        <a href="#contact">Contact</a>
+        <a href="{{ path('app_register') }}">Sign In</a>
+        
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🌅 HERO SECTION -->
+  <header>
+    <h1>Mirano Restaurant</h1>
+    <p>Taste the flavors of tradition and innovation</p>
+    <a href="#menu" class="hero-btn">View Menu</a>
+  </header>
+
+  <!-- ❤️ ABOUT SECTION -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p class="intro">
+      Founded in 2010, <strong>Mirano Restaurant</strong> is a cozy haven for food lovers
+      who crave the warmth of homemade dishes blended with the flair of modern cuisine.
+      Every dish tells a story — crafted with passion, inspired by family, and perfected by years of experience.
+    </p>
+
+
+
+    <div class="services">
+      <div class="service-card">
+        <h3>🍽️ Dine-In Experience</h3>
+        <p>Enjoy a relaxing and elegant atmosphere designed to make every meal memorable.</p>
+      </div>
+      <div class="service-card">
+        <h3>📅 Table Reservation</h3>
+        <p>Book your table online or by phone to secure the perfect spot for any occasion.</p>
+      </div>
+      <div class="service-card">
+        <h3>🎉 Private Events</h3>
+        <p>Celebrate birthdays, anniversaries, or corporate events with our exclusive catering options.</p>
+      </div>
+      <div class="service-card">
+        <h3>🚗 Takeout & Delivery</h3>
+        <p>Enjoy your favorite Mirano meals at home — fresh, fast, and deliciously packed.</p>
+      </div>
+    </div>
+  </section>
+
+<section id="menu" class="menu-section">
+  <h2 class="section-title">🍴 Our Menu</h2>
+  <p class="section-subtitle">Delicious dishes handcrafted with love</p>
+
+  {% if menus is not empty %}
+    <div class="menu-grid">
+      {# Show only 3 featured dishes on the homepage #}
+      {% for menu in menus|slice(0, 3) %}
+  <div class="menu-card">
+    {% if menu.image %}
+      <img src="{{ asset('uploads/images/' ~ menu.image) }}" alt="{{ menu.name }}" class="menu-avatar">
+    {% else %}
+      <img src="{{ asset('images/default-food.png') }}" alt="Default" class="menu-avatar">
+    {% endif %}
+    <h3>{{ menu.name }}</h3>
+    <p class="category">{{ menu.category }}</p>
+    <p class="price">₱{{ menu.price|number_format(2, '.', ',') }}</p>
+    <p class="description">{{ menu.description|default('No description available') }}</p>
+  </div>
+{% endfor %}
+    </div>
+
+    {# “See Full Menu” button redirects to /menu #}
+    <div class="see-more-container">
+      <a href="{{ path('app_full_menu') }}" class="see-more-btn">See Full Menu</a>
+    </div>
+  {% else %}
+    <p class="no-records">No menu items available yet.</p>
+  {% endif %}
+</section>
+
+
+<style>
+  .menu-section {
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: #fff8f5;
+  }
+
+  .section-title {
+    font-family: 'Merriweather', serif;
+    color: #5D2913;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    color: #6b4a3b;
+    margin-bottom: 2rem;
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .menu-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #f3e0d6;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
+
+  .menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+
+  .menu-card h3 {
+    color: #5D2913;
+    font-size: 1.4rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .menu-card .category {
+    color: #a87354;
+    font-style: italic;
+    margin-bottom: 0.8rem;
+  }
+
+  .menu-card .price {
+    font-weight: bold;
+    color: #b23a48;
+    font-size: 1.1rem;
+  }
+
+  .no-records {
+    color: #aaa;
+    font-size: 1.1rem;
+  }
+
+  
+</style>
+
+
+<style>
+  .see-more-container {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .see-more-btn {
+    background-color: #5D2913;
+    color: #FFFFD1;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .see-more-btn:hover {
+    background-color: #7e3b1b;
+    transform: translateY(-3px);
+  }
+</style>
+
+
+
+
+
+   <!-- 🪶 RESERVATION CARD -->
+  <section id="reservation">
+    <h2>Dine With Us</h2>
+    <div class="reservation-grid">
+      <div class="reservation-card">
+        <h3>Make Your Reservation</h3>
+        <p>Plan ahead for the perfect dining experience. Book a table today and savor the warmth of Mirano’s hospitality.</p>
+       <a href="{{ path('app_reservation_book') }}" class="reservation-btn">Reserve Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ☎️ CONTACT SECTION -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>
+      📍 Visit us at 123 Main Street, Negros Oriental<br>
+      ☎️ Call us: (555) 123-4567
+    </p>
+  </section>
+
+  <!-- 🌙 FOOTER -->
+  <footer>
+    &copy; 2025 Mirano Restaurant. All rights reserved.
+  </footer>
+
+ <!-- 🪄 NAVBAR SCROLL SCRIPT -->
+  <script>
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+ 
+
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuCards = document.querySelectorAll(".menu-card");
+    const toggleBtn = document.getElementById("toggleMenuBtn");
+    let expanded = false;
+
+    // Hide all cards except the first 6 initially
+    menuCards.forEach((card, index) => {
+      if (index >= 3) card.classList.add("hidden");
+    });
+
+    toggleBtn.addEventListener("click", () => {
+      expanded = !expanded;
+
+      menuCards.forEach((card, index) => {
+        if (index >= 3) {
+          card.classList.toggle("hidden", !expanded);
+        }
+      });
+
+      toggleBtn.textContent = expanded ? "Show Less" : "See Full Menu";
+    });
+  });
+</script>
+
+  
+</body>
+</html>
+

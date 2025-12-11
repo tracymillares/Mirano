@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mirano Menu{% endblock %}
+
+{% block body %}
+
+
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #fff8f5;
+      color: #333;
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo-img {
+      width: 70px;
+      height: auto;
+      margin-right: 10px;
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+
+   .menu-section {
+      padding: 5rem 2rem;
+      background-color: #fff8f5;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .menu-header {
+      max-width: 700px;
+      margin: auto;
+      margin-bottom: 3rem;
+    }
+
+    .menu-header h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 2.8rem;
+      color: #5D2913;
+      margin-bottom: 1rem;
+    }
+
+    .menu-header p {
+      color: #6b4a3b;
+      font-size: 1.1rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .menu-card {
+      background-color: #ffffff;
+      border: 1px solid #f3e0d6;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      padding: 2rem;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .menu-card h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 1.5rem;
+      color: #5D2913;
+      margin-bottom: 0.3rem;
+    }
+
+    .menu-card .category {
+      font-style: italic;
+      color: #a87354;
+      margin-bottom: 1rem;
+    }
+
+    .menu-card .price {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #b23a48;
+      margin-bottom: 1.2rem;
+    }
+
+    .menu-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-actions button,
+    .menu-actions a {
+      background: none;
+      border: none;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #5D2913;
+      transition: color 0.3s ease;
+    }
+
+    .menu-actions button:hover,
+    .menu-actions a:hover {
+      color: #b23a48;
+    }
+
+    .add-button {
+      display: inline-block;
+      margin-top: 3rem;
+      background-color: #5D2913;
+      color: #FFFFD1;
+      padding: 0.9rem 2.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    }
+
+    .add-button:hover {
+      background-color: #b6643eff;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    }
+
+    /* === MODAL === */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.95);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    .modal h2 {
+      color: #5D2913;
+      font-family: 'Merriweather', serif;
+      margin-bottom: 1rem;
+    }
+
+    .modal p {
+      color: #6b4a3b;
+      margin-bottom: 1rem;
+    }
+
+    .modal .price {
+      font-weight: bold;
+      color: #b23a48;
+      margin-top: 0.5rem;
+    }
+
+    .close-btn {
+      background: #b23a48;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: 600;
+    }
+
+    .close-btn:hover {
+      background: #922b3e;
+    }
+  </style>
+
+  <section class="menu-section">
+    <div class="menu-header">
+      <h1>Mirano Menu</h1>
+      <p>Explore our handcrafted dishes made with love and inspired by the warmth of Filipino tradition.</p>
+    </div>
+
+    {% if menus is empty %}
+      <p class="no-records">No menu items available yet.</p>
+    {% else %}
+      <div class="menu-grid">
+        {% for menu in menus %}
+          <div class="menu-card">
+    {% if menu.image %}
+        <img src="{{ asset('uploads/images/' ~ menu.image) }}" alt="{{ menu.name }}" 
+             class="w-full h-48 object-cover rounded-lg mb-3">
+    {% else %}
+        <img src="{{ asset('images/default-food.jpg') }}" alt="No image available" 
+             class="w-full h-48 object-cover rounded-lg mb-3">
+    {% endif %}
+
+    <h2>{{ menu.name }}</h2>
+
+            <p class="category">{{ menu.category }}</p>
+            <p class="price">₱{{ menu.price|number_format(2, '.', ',') }}</p>
+
+            <div class="menu-actions">
+              <button class="view-btn"
+                      data-id="{{ menu.id }}"
+                      data-name="{{ menu.name }}"
+                      data-category="{{ menu.category }}"
+                      data-price="₱{{ menu.price|number_format(2, '.', ',') }}"
+                      data-image="{{ asset('uploads/images/' ~ menu.image) }}">
+                View Details
+              </button>
+              <button class="edit-btn" data-id="{{ menu.id }}">Edit</button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <a href="{{ path('app_mirano_menu_new') }}" class="add-button">Add New Dish</a>
+  </section>
+
+<!-- 🌸 VIEW MODAL -->
+<div class="modal" id="menuModal">
+  <div class="modal-content">
+    <img id="modalImage" src="" alt="Food image"
+         style="width:100%; height:250px; object-fit:cover; border-radius:12px; margin-bottom:1rem;">
+    <h2 id="modalName"></h2>
+    <p><strong>ID:</strong> <span id="modalId"></span></p>
+    <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+    <p class="price"><strong>Price:</strong> <span id="modalPrice"></span></p>
+    <div style="text-align: right; margin-top: 2rem;">
+      <button class="close-btn" id="closeModal">Close</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- 🌸 EDIT MODAL -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <h2>✏️ Edit Menu</h2>
+      <div id="editFormContainer">
+        <!-- form loaded dynamically -->
+      </div>
+      <div style="text-align: right; margin-top: 2rem;">
+        <button class="close-btn" id="closeEditModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const viewModal = document.getElementById('menuModal');
+    const closeModal = document.getElementById('closeModal');
+    const editModal = document.getElementById('editModal');
+    const closeEditModal = document.getElementById('closeEditModal');
+    const editContainer = document.getElementById('editFormContainer');
+
+    // VIEW DETAILS
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('modalId').textContent = btn.dataset.id;
+        document.getElementById('modalName').textContent = btn.dataset.name;
+        document.getElementById('modalCategory').textContent = btn.dataset.category;
+        document.getElementById('modalPrice').textContent = btn.dataset.price;
+        document.getElementById('modalImage').src = btn.dataset.image;
+        viewModal.style.display = 'flex';
+      });
+    });
+
+    closeModal.addEventListener('click', () => viewModal.style.display = 'none');
+
+    // EDIT MENU (fetch Twig partial)
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        fetch(`/mirano/menu/${btn.dataset.id}/edit`)
+          .then(response => response.text())
+          .then(html => {
+            editContainer.innerHTML = html;
+            editModal.style.display = 'flex';
+          });
+      });
+    });
+
+    closeEditModal.addEventListener('click', () => editModal.style.display = 'none');
+
+    window.addEventListener('click', e => {
+      if (e.target === viewModal) viewModal.style.display = 'none';
+      if (e.target === editModal) editModal.style.display = 'none';
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order {{ menu.name }} - Mirano{% endblock %}
+
+{% block body %}
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
+    color: #5D2913;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+
+  /* === NAVBAR === */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0.4rem 1.5rem;
+      transition: all 0.4s ease;
+      
+    }
+
+    nav.scrolled {
+      background: #ffffff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 70px;
+      height: auto;
+      margin-right: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #5D2913;
+      letter-spacing: 1px;
+      font-family: 'Merriweather', serif;
+    }
+
+    .logo-link:hover .logo-img {
+      transform: scale(1.1);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: #5D2913;
+      font-weight: 500;
+      position: relative;
+      font-size: 1rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 0%;
+      height: 2px;
+      background-color: #b23a48;
+      transition: width 0.3s ease;
+      border-radius: 5px;
+    }
+
+    .nav-links a:hover {
+      color: #b23a48;
+      transform: translateY(-2px);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: #b23a48;
+    }
+
+     /* Sign In Button Styling */
+    .nav-links .signin-btn {
+      background-color: #5D2913;
+      color: #FFFFD1;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links .signin-btn:hover {
+      background-color: #b23a48;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+
+
+  .order-container {
+    background: #fff;
+    max-width: 450px;
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+    margin-bottom: 2rem;
+
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ✅ Image fix — preserve full image, no cropping */
+  .menu-image {
+    width: 50%;
+    max-width: 300px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-top: 100px;
+    margin-bottom: 0.8rem;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  }
+
+  h1 {
+    font-size: 1.3rem;
+    color: #b23a48;
+    margin: 0.4rem 0;
+  }
+
+  .price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #b23a48;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: #6b3e2e;
+    margin-bottom: 0.8rem;
+  }
+
+  form {
+    margin-top: 1rem;
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 0.6rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1.3px solid #f1d2c0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, textarea:focus {
+    border-color: #b23a48;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(178,58,72,0.1);
+  }
+
+  .order-btn {
+    width: 100%;
+    background-color: #b23a48;
+    color: #fff8f5;
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 0.4rem;
+  }
+
+  .order-btn:hover {
+    background-color: #8e2f3a;
+    transform: translateY(-2px);
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #b23a48;
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-link:hover {
+    color: #7e3b1b;
+  }
+</style>
+
+<div class="order-container">
+  {% if menu.image %}
+    <img src="{{ asset('uploads/images/' ~ menu.image) }}" alt="{{ menu.name }}" class="menu-image">
+  {% endif %}
+
+  <h1>{{ menu.name }}</h1>
+  <p class="price">₱{{ menu.price|number_format(2, '.', ',') }}</p>
+  <p>{{ menu.description|default('No description available') }}</p>
+
+  {{ form_start(form) }}
+    <div class="form-group">
+      {{ form_label(form.customer_name) }}
+      {{ form_widget(form.customer_name) }}
+    </div>
+
+    <div class="form-group">
+      {{ form_label(form.customer_email) }}
+      {{ form_widget(form.customer_email) }}
+    </div>
+
+    <div class="form-group">
+      {{ form_label(form.phone) }}
+      {{ form_widget(form.phone) }}
+    </div>
+
+    <div class="form-group">
+      {{ form_label(form.quantity) }}
+      {{ form_widget(form.quantity) }}
+    </div>
+
+    <div class="form-group">
+      {{ form_label(form.special_request) }}
+      {{ form_widget(form.special_request) }}
+    </div>
+
+    <button type="submit" class="order-btn">Place Order</button>
+  {{ form_end(form) }}
+
+  <a href="{{ path('app_mirano') }}" class="back-link">← Back to Menu</a>
+</div>
+{% endblock %}

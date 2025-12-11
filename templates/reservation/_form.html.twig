@@ -1,0 +1,72 @@
+{{ form_start(form, {'attr': {'class': 'mirano-form'}}) }}
+  <style>
+  
+     .logo-img {
+      width: 70px;
+      height: auto;
+      margin-right: 10px;
+      padding: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .mirano-form {
+      text-align: left;
+    }
+
+    .mirano-form label {
+      display: block;
+      font-weight: 600;
+      color: #5D2913;
+      margin-bottom: 0.4rem;
+    }
+
+    .mirano-form input,
+    .mirano-form textarea,
+    .mirano-form select {
+      width: 100%;
+      padding: 0.9rem;
+      border: 1px solid #d9c7b5;
+      border-radius: 10px;
+      background-color: #fffdf8;
+      margin-bottom: 1.4rem;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .mirano-form input:focus,
+    .mirano-form textarea:focus,
+    .mirano-form select:focus {
+      outline: none;
+      border-color: #5D2913;
+      box-shadow: 0 0 0 3px rgba(93,41,19,0.1);
+    }
+
+    .mirano-form textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    .mirano-form .btn {
+      background-color: #2d8b41ff;
+      color: #FFFFD1;
+      padding: 0.9rem 2.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+
+    .mirano-form .btn:hover {
+      background-color: #43b35bfb;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+  </style>
+
+  {{ form_widget(form) }}
+  <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
