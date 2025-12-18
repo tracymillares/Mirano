@@ -23,10 +23,20 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $totalPrice = $menu->getPrice() * $order->getQuantity();
+
+            // Calculate total price
+            $quantity = $order->getQuantity() ?? 1;
+            $totalPrice = $menu->getPrice() * $quantity;
             $order->setTotalPrice($totalPrice);
+
+            // Set order date and default status
             $order->setOrderDate(new \DateTime());
             $order->setStatus('Pending');
+
+            // Set the user who created the order (if logged in)
+            if ($this->getUser()) {
+                $order->setCreatedBy($this->getUser());
+            }
 
             $em->persist($order);
             $em->flush();
@@ -49,4 +59,6 @@ class OrderController extends AbstractController
             'order' => $order,
         ]);
     }
+
+    
 }

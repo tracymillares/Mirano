@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\ActivityLogger;
 
 #[Route('/reservation')]
 final class ReservationController extends AbstractController
@@ -25,50 +26,64 @@ final class ReservationController extends AbstractController
     }
 
     // NEW - Admin form to create a reservation
-    #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
+   #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
+public function new(Request $request, EntityManagerInterface $em, ActivityLogger $activityLogger): Response
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reservation);
-            $entityManager->flush();
+    $reservation = new Reservation();
+    $reservation->setCreatedBy($this->getUser()); // ✅ ADMIN OWNER
 
-            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
-        }
+    $form = $this->createForm(ReservationType::class, $reservation);
+    $form->handleRequest($request);
 
-        return $this->render('reservation/new.html.twig', [
-            'reservation' => $reservation,
-            'form' => $form,
-        ]);
-    }
+    if ($form->isSubmitted() && $form->isValid()) {
+    $em->persist($reservation);
+    $em->flush();
+
+    $activityLogger->log(
+        'CREATE',
+        'Reservation ID: ' . $reservation->getId()
+    );
+
+    return $this->redirectToRoute('app_reservation_index');
+}
+
+
+    return $this->render('reservation/new.html.twig', [
+        'reservation' => $reservation,
+        'form' => $form,
+    ]);
+}
 
     // BOOK - Front-end user reservation form
-    #[Route('/book', name: 'app_reservation_book', methods: ['GET', 'POST'])]
-    public function book(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationBookType::class, $reservation); // <-- uses front-end form
-        $form->handleRequest($request);
+   #[Route('/book', name: 'app_reservation_book', methods: ['GET', 'POST'])]
+public function book(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $reservation = new Reservation();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Your reservation is confirmed!');
-
-            // Redirect to home or a thank-you page
-          return $this->redirectToRoute('reservation_thank_you');
-
-        }
-
-        return $this->render('reservation/book.html.twig', [
-            'reservation' => $reservation,
-            'form' => $form,
-        ]);
+    // ✅ OPTIONAL: only set if logged in
+    if ($this->getUser()) {
+        $reservation->setCreatedBy($this->getUser());
     }
+
+    $form = $this->createForm(ReservationBookType::class, $reservation);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Your reservation is confirmed!');
+
+        return $this->redirectToRoute('reservation_thank_you');
+    }
+
+    return $this->render('reservation/book.html.twig', [
+        'reservation' => $reservation,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/thank-you', name: 'reservation_thank_you', methods: ['GET'])]
 public function thankYou(): Response
@@ -88,16 +103,21 @@ public function thankYou(): Response
 
     // EDIT - Admin edit reservation
     #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Reservation $reservation, EntityManagerInterface $em, ActivityLogger $activityLogger): Response
     {
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    $em->flush();
 
-            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
-        }
+    $activityLogger->log(
+        'UPDATE',
+        'Reservation ID: ' . $reservation->getId()
+    );
+
+    return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+}
 
         return $this->render('reservation/edit.html.twig', [
             'reservation' => $reservation,
@@ -107,12 +127,17 @@ public function thankYou(): Response
 
     // DELETE - Admin delete reservation
     #[Route('/{id}', name: 'app_reservation_delete', methods: ['POST'])]
-    public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Reservation $reservation, EntityManagerInterface $em, ActivityLogger $activityLogger): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($reservation);
-            $entityManager->flush();
-        }
+    $em->remove($reservation);
+    $em->flush();
+
+    $activityLogger->log(
+        'DELETE',
+        'Reservation ID: ' . $reservation->getId()
+    );
+}
 
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
     }

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\ActivityLogger;
 
 class RegistrationController extends AbstractController
 {
@@ -17,32 +18,32 @@ class RegistrationController extends AbstractController
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ActivityLogger $activityLogger
     ): Response {
 
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+       if ($form->isSubmitted() && $form->isValid()) {
+    $plainPassword = $form->get('plainPassword')->getData();
+    $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+    $user->setRoles(['ROLE_STAFF']);
 
-            // Hash the password
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+    $entityManager->persist($user);
+    $entityManager->flush();
 
-            // Default role for new users
-            $user->setRoles(['ROLE_STAFF']);
+    // ⚡ Log this event
+    $activityLogger->log(
+        'CREATE_USER',
+        'User: ' . $user->getUsername() . ' (ID: ' . $user->getId() . ')'
+    );
 
-            // Save user
-            $entityManager->persist($user);
-            $entityManager->flush();
+    $this->addFlash('success', 'Registration successful! You may now log in.');
+    return $this->redirectToRoute('app_login', ['registered' => 1]);
+}
 
-            // Flash success message
-            $this->addFlash('success', 'Registration successful! You may now log in.');
-
-            // Redirect to login page with flag to prevent auto-dashboard redirect
-            return $this->redirectToRoute('app_login', ['registered' => 1]);
-        }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,

@@ -40,13 +40,18 @@ class Order
     #[ORM\Column(length: 50)]
     private ?string $status = 'Pending';
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $total_price = null;
+    #[ORM\Column(type: 'float')]
+    private ?float $total_price = 0.0;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $createdBy = null;
 
     public function __construct()
     {
         $this->order_date = new \DateTime();
         $this->status = 'Pending';
+        $this->total_price = 0.0;
     }
 
     public function getId(): ?int { return $this->id; }
@@ -72,9 +77,31 @@ class Order
     public function getOrderDate(): ?\DateTimeInterface { return $this->order_date; }
     public function setOrderDate(\DateTimeInterface $order_date): static { $this->order_date = $order_date; return $this; }
 
-    public function getStatus(): ?string { return $this->status; }
-    public function setStatus(string $status): static { $this->status = $status; return $this; }
 
-    public function getTotalPrice(): ?string { return $this->total_price; }
-    public function setTotalPrice(string $total_price): static { $this->total_price = $total_price; return $this; }
+public function getStatus(): ?string
+{
+    return $this->status;
+}
+
+public function setStatus(string $status): self
+{
+    $this->status = $status;
+    return $this;
+}
+
+
+    public function getTotalPrice(): ?float { return $this->total_price; }
+    public function setTotalPrice(float $total_price): self { $this->total_price = $total_price; return $this; }
+
+    public function getCreatedBy(): ?User { return $this->createdBy; }
+    public function setCreatedBy(?User $user): self { $this->createdBy = $user; return $this; }
+
+    public function calculateTotal(): void
+{
+    if ($this->menu && $this->quantity) {
+        $this->total_price = $this->menu->getPrice() * $this->quantity;
+
+    }
+}
+
 }

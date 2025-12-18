@@ -1,0 +1,301 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Records{% endblock %}
+
+{% block body %}
+
+{% include 'layouts/sidebar.html.twig' %}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5;
+        color: #5D2913;
+        padding: 2rem;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #b23a48;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        margin: 2rem 0 1rem;
+        color: #5D2913;
+    }
+
+    .search-container {
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .search-container input {
+        padding: 0.5rem 0.7rem;
+        border: 1px solid #f1d2c0;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        width: 250px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background-color: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 0.8rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #f3e0d6;
+    }
+
+    th {
+        background-color: #5D2913;
+        color: #FFFFD1;
+        font-weight: 600;
+    }
+
+    tr:hover {
+        background-color: #fff2eb;
+    }
+
+    .action-btn {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-right: 0.3rem;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+
+    .edit-btn {
+        background-color: #b23a48;
+        color: #fff;
+    }
+
+    .edit-btn:hover {
+        background-color: #8e2f3a;
+    }
+
+    .delete-btn {
+        background-color: #5D2913;
+        color: #FFFFD1;
+    }
+
+    .delete-btn:hover {
+        background-color: #3e1d0f;
+    }
+
+    .status-dropdown {
+        padding: 0.3rem 0.5rem;
+        border-radius: 6px;
+        border: 1px solid #f1d2c0;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .flash-success {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<h1>Admin Records</h1>
+
+{% for message in app.flashes('success') %}
+    <div class="flash-success">{{ message }}</div>
+{% endfor %}
+
+
+<h2 class="section-title">Menu Items</h2>
+<div class="search-container">
+    <input type="text" id="menuSearch" placeholder="Search menu items...">
+</div>
+<table id="menuTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for menu in menus %}
+        <tr>
+            <td>{{ menu.id }}</td>
+            <td>{{ menu.name }}</td>
+            <td>{{ menu.category }}</td>
+            <td>₱{{ menu.price|number_format(2, '.', ',') }}</td>
+            <td>
+                <a href="{{ path('app_mirano_menu_edit', {'id': menu.id}) }}" class="action-btn edit-btn">Edit</a>
+                <form method="post" action="{{ path('admin_menu_delete', {'id': menu.id}) }}" style="display:inline;" onsubmit="return confirm('Delete this menu item?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_menu' ~ menu.id) }}">
+                    <button class="action-btn delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No menu items found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# ORDERS TABLE #}
+<h2 class="section-title">Orders</h2>
+<div class="search-container">
+    <input type="text" id="orderSearch" placeholder="Search orders...">
+</div>
+<table id="orderTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Menu</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customerName }}</td>
+            <td>{{ order.customerEmail }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.menu.name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>₱{{ order.totalPrice|number_format(2, '.', ',') }}</td>
+            <td>
+                <form method="post" action="{{ path('admin_order_update_status', {'id': order.id}) }}">
+                    <select name="status" class="status-dropdown" onchange="this.form.submit()">
+                        <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Approved" {% if order.status == 'Approved' %}selected{% endif %}>Approved</option>
+                        <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </form>
+            </td>
+            <td>
+                <a href="{{ path('admin_order_edit', {'id': order.id}) }}" class="action-btn edit-btn">Edit</a>
+                <form method="post" action="{{ path('admin_order_delete', {'id': order.id}) }}" style="display:inline;" onsubmit="return confirm('Delete this order?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_order' ~ order.id) }}">
+                    <button class="action-btn delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9">No orders found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# RESERVATIONS TABLE #}
+<h2 class="section-title">Reservations</h2>
+<div class="search-container">
+    <input type="text" id="reservationSearch" placeholder="Search reservations...">
+</div>
+
+<table id="reservationTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Guests</th>
+            <th>Date</th>
+            <th>Menu</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+        <tr>
+            <td>{{ reservation.id }}</td>
+            <td>{{ reservation.name }}</td>
+            <td>{{ reservation.email }}</td>
+            <td>{{ reservation.phone }}</td>
+            <td>{{ reservation.guest }}</td>
+            <td>{{ reservation.date|date('Y-m-d H:i') }}</td>
+
+            <td>
+                {{ reservation.menu ? reservation.menu.name : 'N/A' }}
+            </td>
+
+            <td>{{ reservation.message }}</td>
+
+            <td>
+                <form method="post" action="{{ path('admin_reservation_edit', {'id': reservation.id}) }}">
+                    <select name="status" class="status-dropdown" onchange="this.form.submit()">
+                        <option value="Pending" {{ reservation.status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="Approved" {{ reservation.status == 'Approved' ? 'selected' : '' }}>Approved</option>
+                        <option value="Completed" {{ reservation.status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                    </select>
+                </form>
+            </td>
+
+            <td>
+                <a href="{{ path('admin_reservation_edit', {'id': reservation.id}) }}" class="action-btn edit-btn">Edit</a>
+                <form method="post"
+                      action="{{ path('admin_reservation_delete', {'id': reservation.id}) }}"
+                      style="display:inline;"
+                      onsubmit="return confirm('Delete this reservation?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete_reservation' ~ reservation.id) }}">
+                    <button class="action-btn delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="10" style="text-align:center;">No reservations found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function setupSearch(inputId, tableId) {
+    const input = document.getElementById(inputId);
+    const table = document.getElementById(tableId);
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    input.addEventListener('input', function() {
+        const filter = this.value.toLowerCase();
+        Array.from(rows).forEach(row => {
+            const cells = row.getElementsByTagName('td');
+            let match = false;
+            for (let i = 0; i < cells.length; i++) {
+                if (cells[i].textContent.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            row.style.display = match ? '' : 'none';
+        });
+    });
+}
+
+setupSearch('orderSearch', 'orderTable');
+setupSearch('reservationSearch', 'reservationTable');
+</script>
+
+{% endblock %}

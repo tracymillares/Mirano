@@ -26,17 +26,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    // ----------------- NEW FIELD -----------------
+    // Temporary field (NOT in DB)
+    private ?string $plainPassword = null;
+
     #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\Column(type: "boolean")]
+    private bool $isActive = true;
+
+
     public function __construct()
     {
-        // Automatically set account creation date
         $this->createdAt = new \DateTimeImmutable();
     }
-
-    // ----------------- Getters / Setters -----------------
 
     public function getId(): ?int
     {
@@ -62,10 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-
-        // guarantee every user always has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
@@ -86,6 +86,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // ---------------------------
+    // PLAIN PASSWORD (not saved)
+    // ---------------------------
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    // ---------------------------
+
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -99,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // no temporary data stored
+        $this->plainPassword = null;
     }
 
     public function __serialize(): array

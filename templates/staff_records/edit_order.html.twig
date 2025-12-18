@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Order{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar_staff.html.twig' %}
+
+<style>
+/* Container */
+.content-container {
+    margin-left: 260px; /* account for sidebar */
+    padding: 2rem;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fef8f2;
+}
+
+/* Headings */
+h1 {
+    color: #b23a48;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Form Card */
+.form-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #5D2913;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #f1d2c0;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+/* Buttons */
+button.action-btn {
+    padding: 0.5rem 1rem;
+    background-color: #5D2913;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button.action-btn:hover {
+    background-color: #3e1b0d;
+}
+
+/* Flash Message */
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border-left: 5px solid #28a745;
+}
+</style>
+
+<div class="content-container">
+    <h1>Edit Order #{{ order.id }}</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="form-card">
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.customerName) }}
+            {{ form_widget(form.customerName) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.customerEmail) }}
+            {{ form_widget(form.customerEmail) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.menu) }}
+            {{ form_widget(form.menu) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.quantity) }}
+            {{ form_widget(form.quantity) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.specialRequest) }}
+            {{ form_widget(form.specialRequest) }}
+        </div>
+
+    
+        <button class="action-btn" type="submit">Save Changes</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

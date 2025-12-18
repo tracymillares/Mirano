@@ -7,12 +7,24 @@
     {{ encore_entry_link_tags('app') }}
 
     {% block stylesheets %}{% endblock %}
+
+    <!-- Added CSS to style the logo -->
+    <style>
+      /* Make the logo smaller and align it vertically */
+      .logo-img {
+        max-height: 45px; /* Adjust height as needed for compactness */
+        width: auto; /* Maintain aspect ratio */
+        /* Slight adjustment to ensure vertical alignment within the h-16 navbar div */
+        margin-top: 3px; 
+      }
+    </style>
 </head>
 
 
   <body class="antialiased bg-gray-50 text-gray-900">
 
     <!-- Simple Navbar -->
+    <!-- Removed 'fixed top-0 w-full' classes to allow the navbar to scroll with the page -->
     <nav class="bg-white shadow">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -33,6 +45,7 @@
 
     <!-- Page Content -->
     <main>
+    
       {% block body %}{% endblock %}
     </main>
 
@@ -67,3 +80,4 @@
   {{ encore_entry_script_tags('app') }}
 
 </html>
+ 

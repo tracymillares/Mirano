@@ -4,9 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use App\Entity\Menu;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -34,64 +33,45 @@ class Reservation
     #[ORM\Column(length: 255)]
     private ?string $message = null;
 
-    #[ORM\ManyToMany(targetEntity: Menu::class)]
-    #[ORM\JoinTable(name: "reservation_menu")]
-    private Collection $menus;
-
-    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[ORM\ManyToOne(targetEntity: Menu::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Menu $menu = null;
 
-    public function __construct()
-    {
-        $this->menus = new ArrayCollection();
-    }
+    #[ORM\Column(length: 50)]
+    private string $status = 'Pending';
 
-    // Getters and Setters
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $createdBy = null;
+
+    // ================= GETTERS / SETTERS =================
+
     public function getId(): ?int { return $this->id; }
+
     public function getName(): ?string { return $this->name; }
-    public function setName(string $name): static { $this->name = $name; return $this; }
+    public function setName(string $name): self { $this->name = $name; return $this; }
+
     public function getEmail(): ?string { return $this->email; }
-    public function setEmail(string $email): static { $this->email = $email; return $this; }
+    public function setEmail(string $email): self { $this->email = $email; return $this; }
+
     public function getPhone(): ?string { return $this->phone; }
-    public function setPhone(string $phone): static { $this->phone = $phone; return $this; }
+    public function setPhone(string $phone): self { $this->phone = $phone; return $this; }
+
     public function getGuest(): ?int { return $this->guest; }
-    public function setGuest(int $guest): static { $this->guest = $guest; return $this; }
+    public function setGuest(int $guest): self { $this->guest = $guest; return $this; }
+
     public function getDate(): ?\DateTime { return $this->date; }
-    public function setDate(\DateTime $date): static { $this->date = $date; return $this; }
+    public function setDate(\DateTime $date): self { $this->date = $date; return $this; }
+
     public function getMessage(): ?string { return $this->message; }
-    public function setMessage(string $message): static { $this->message = $message; return $this; }
+    public function setMessage(string $message): self { $this->message = $message; return $this; }
 
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenus(): Collection
-    {
-        return $this->menus;
-    }
+    public function getMenu(): ?Menu { return $this->menu; }
+    public function setMenu(?Menu $menu): self { $this->menu = $menu; return $this; }
 
-    public function addMenu(Menu $menu): static
-    {
-        if (!$this->menus->contains($menu)) {
-            $this->menus->add($menu);
-        }
-        return $this;
-    }
+    public function getStatus(): string { return $this->status; }
+    public function setStatus(string $status): self { $this->status = $status; return $this; }
 
-    public function removeMenu(Menu $menu): static
-    {
-        $this->menus->removeElement($menu);
-        return $this;
-    }
-
-    public function getMenu(): ?Menu
-    {
-        return $this->menu;
-    }
-
-    public function setMenu(?Menu $menu): static
-    {
-        $this->menu = $menu;
-
-        return $this;
-    }
+    public function getCreatedBy(): ?User { return $this->createdBy; }
+    public function setCreatedBy(?User $user): self { $this->createdBy = $user; return $this; }
 }

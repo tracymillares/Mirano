@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Staff{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 420px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    h1 {
+        color: #b23a48;
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.6rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .btn {
+        background-color: #b23a48;
+        color: #fff8f5;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #7e3b1b;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        margin-top: 1rem;
+        display: block;
+        text-decoration: none;
+        color: #5D2913;
+        font-weight: 600;
+    }
+</style>
+
+<div class="modal-overlay">
+    <div class="modal">
+        <h1>Add New Staff</h1>
+
+       {{ form_start(form) }}
+    {{ form_row(form.username, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form.roles, {'attr': {'class': 'form-control'}}) }}
+    {{ form_row(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+    <button class="btn">Create</button>
+{{ form_end(form) }}
+
+        <a href="{{ path('staff_index') }}" class="back-link">← Back to Staff List</a>
+    </div>
+</div>
+{% endblock %}

@@ -23,10 +23,11 @@ class StaffManagementType extends AbstractType
                 'expanded' => false,
                 'multiple' => true,
             ])
-            ->add('plainPassword', PasswordType::class, [
-                'mapped' => false, // not directly mapped to User entity
-                'required' => $options['is_edit'] ? false : true,
+           ->add('plainPassword', PasswordType::class, [
+                'mapped' => false,
+                'required' => true,
             ])
+
         ;
     }
 

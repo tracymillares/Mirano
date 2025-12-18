@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activity Logs{% endblock %}
+
+{% block body %}
+
+{% include 'layouts/sidebar.html.twig' %}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5; /* Uniform background color */
+        color: #5D2913; /* Primary text color */
+        margin: 0;
+        /* Standardized padding for content viewing area below fixed navbar */
+        padding: 0 2rem 2rem 2rem; 
+        padding-top: 60px; 
+    }
+
+    .content-container {
+        /* Removed unnecessary padding-top/left as body padding handles this now */
+        padding-right: 0px; 
+        /* Ensure the container is centered and has width constraint */
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-family: 'Merriweather', serif; /* Uniform title font */
+        font-size: 2rem;
+        color: #b23a48; /* Accent color for titles */
+        margin-top: 1rem; /* Standardized top margin */
+        margin-bottom: 1.5rem;
+        text-align: center; /* Center the title */
+    }
+
+    /* Table Base Styling */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Uniform shadow */
+        background-color: #fff;
+        border-radius: 12px; /* Uniform border radius */
+        overflow: hidden;
+    }
+
+    /* Table Header */
+    .table thead {
+        background-color: #5D2913; /* Uniform header color */
+        color: #FFFFD1; /* Uniform header text color */
+    }
+
+    .table thead th {
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    /* Table Body */
+    .table tbody td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #f3e0d6; /* Uniform border color */
+    }
+
+    /* Hover effect */
+    .table tbody tr:hover {
+        background-color: #fff2eb; /* Uniform hover color */
+        /* Removed transform: scale(1.01) for uniformity with other tables */
+    }
+
+    /* No data row */
+    .table tbody tr td[colspan] {
+        text-align: center;
+        font-style: italic;
+        color: #888;
+        padding: 2rem;
+    }
+</style>
+
+<div class="content-container">
+    <h1><i class="fas fa-history"></i> Activity Logs</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Role</th>
+                <th>Action</th>
+                <th>Target Data</th>
+                <th>Date & Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+                <tr>
+                    <td>{{ log.id }}</td>
+                    <td>{{ log.username }}</td>
+                    <td>{{ log.role }}</td>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.targetData }}</td>
+                    <td>{{ log.createdAt|date('F j, Y H:i:s') }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6">No activity logs found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

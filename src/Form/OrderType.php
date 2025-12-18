@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Order;
+use App\Entity\Menu;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,13 +17,18 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('customer_name', null, [
-                'label' => 'Your Name',
+                'label' => 'Customer Name',
             ])
             ->add('customer_email', null, [
                 'label' => 'Email Address',
             ])
             ->add('phone', null, [
                 'label' => 'Phone Number',
+            ])
+            ->add('menu', EntityType::class, [
+                'class' => Menu::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Select a menu item',
             ])
             ->add('quantity', IntegerType::class, [
                 'label' => 'Quantity',

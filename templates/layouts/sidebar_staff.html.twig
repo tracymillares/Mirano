@@ -1,0 +1,159 @@
+<!-- templates/layouts/sidebar_staff.html.twig -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<nav>
+    <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
+</nav>
+
+<div class="sidebar" id="sidebar">
+    <h2>Staff Panel</h2>
+
+    <!-- Dashboard -->
+    <a href="{{ path('app_staff_dashboard') }}" class="{% if app.request.attributes.get('_route') == 'app_staff_dashboard' %}active{% endif %}">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+    </a>
+
+ <!-- Profile / Password -->
+    <a href="{{ path('app_staff_profile') }}">
+        <i class="fas fa-key"></i> Profile
+    </a>
+
+    <!-- Records -->
+    <a href="{{ path('staff_records_index') }}" class="{% if app.request.attributes.get('_route') starts with 'staff_records' %}active{% endif %}">
+        <i class="fas fa-folder-open"></i> Records
+<!-- Redirect to staff menu page instead of new_order -->
+<a href="{{ path('staff_menu') }}">
+    <i class="fas fa-plus"></i> Add Order
+</a>
+    <a href="{{ path('staff_reservation_new') }}">
+        <i class="fas fa-plus"></i> Add Reservation
+    </a>
+
+    <!-- Logout -->
+    <a href="{{ path('app_logout') }}">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<style>
+/* NAVBAR */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    z-index: 1100;
+}
+
+.hamburger {
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #5D2913;
+    background: none;
+    border: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.hamburger:hover {
+    color: #b23a48;
+    transform: scale(1.1);
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 240px;
+    height: 100%;
+    background: rgba(93, 41, 19, 0.97);
+    backdrop-filter: blur(8px);
+    padding-top: 90px;
+    color: #fff;
+    transition: all 0.4s ease;
+    z-index: 1050;
+}
+
+.sidebar.active {
+    left: 0;
+    animation: slideIn 0.4s ease forwards;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-family: 'Merriweather', serif;
+    font-size: 1.3rem;
+    color: #FFFFD1;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    gap: 12px;
+    border-radius: 8px;
+    margin: 0.3rem 0.8rem;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #b23a48;
+    box-shadow: 0 0 12px rgba(255,255,255,0.25);
+    transform: translateX(5px);
+}
+
+.sidebar a i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* OVERLAY */
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+}
+
+.overlay.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from { left: -260px; opacity: 0; }
+    to { left: 0; opacity: 1; }
+}
+</style>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+hamburgerBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+});
+
+overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+});
+</script>

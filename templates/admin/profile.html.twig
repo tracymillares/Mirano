@@ -3,8 +3,8 @@
 {% block title %}Admin Profile{% endblock %}
 
 {% block body %}
-<!-- 🎨 Include FontAwesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+{% include 'layouts/sidebar.html.twig' %}
 
 <style>
   body {
@@ -130,7 +130,8 @@
   h1 {
     font-family: 'Gotham', sans-serif;
     font-size: 2rem;
-    margin-top: 30px;
+    text-align: center;
+    margin-top: 50px;
     margin-bottom: 2rem;
     color: #5D2913;
   }
@@ -178,27 +179,10 @@
 
 </style>
 
-<!-- 🌸 TOP NAVBAR -->
-<nav>
-  <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
-</nav>
-
-<!-- 🌿 SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <h2>Admin Panel</h2>
-  <a href="{{ path('app_admin_dashboard') }}"><i class="fas fa-home"></i> Home</a>
-  <a href="{{ path('app_admin_profile') }}" class="active"><i class="fas fa-user"></i> Profile</a>
-  <a href="{{ path('app_mirano_menu_index') }}"><i class="fas fa-utensils"></i> Menu</a>
-  <a href="{{ path('app_reservation_index') }}"><i class="fas fa-calendar-alt"></i> Reservations</a>
-  <a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</div>
-
-<!-- 🔲 OVERLAY -->
-<div class="overlay" id="overlay"></div>
 
 <!-- 🍽️ DASHBOARD CONTENT -->
 <section class="dashboard" id="mainDashboard">
-  <h1>👤 Admin Profile</h1>
+  <h1>Admin Profile</h1>
 
   {% for message in app.flashes('success') %}
     <div class="alert alert-success">{{ message }}</div>

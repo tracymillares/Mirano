@@ -1,0 +1,177 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Staff Management{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar.html.twig' %}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5;
+        color: #5D2913;
+        margin: 0;
+        /* Added padding-top to give space for the fixed navbar */
+        padding: 0 2rem 2rem 2rem; 
+        padding-top: 60px;
+    }
+
+    h1 {
+        text-align: center;
+        /* Adjusted margin-top to align nicely within the new body padding */
+        margin-top: 1rem; 
+        margin-bottom: 2rem;
+        color: #b23a48;
+    }
+
+    .staff-container {
+        width: 90%;
+        /* Removed large margin-top that was causing overlap issues */
+        margin: 0 auto 2rem auto; 
+    }
+
+    .add-btn {
+        background-color: #b23a48;
+        padding: 0.6rem 1rem;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        float: right;
+        margin-bottom: 1rem;
+        transition: 0.2s;
+    }
+
+    .add-btn:hover {
+        background-color: #7e3b1b;
+        transform: translateY(-2px);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    th {
+        background-color: #b23a48;
+        color: #fff;
+        padding: 0.9rem;
+        text-align: left;
+    }
+
+    td {
+        padding: 0.8rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+        background-color: #f9e6e6;
+    }
+
+    .btn {
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .edit-btn {
+        background-color: #5D2913;
+    }
+
+    .edit-btn:hover {
+        background-color: #7e3b1b;
+    }
+
+    .delete-btn {
+        background-color: #b23a48;
+    }
+
+    .delete-btn:hover {
+        background-color: #d24a5a;
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+</style>
+
+<h1>Staff Management</h1>
+
+<div class="staff-container">
+    <a href="{{ path('staff_new') }}" class="add-btn">+ Add Staff</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Roles</th>
+                <th>Status</th>
+                <th>Date Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.roles|join(', ') }}</td>
+                <td>
+                    <strong>{{ user.isActive ? 'Active' : 'Disabled' }}</strong>
+                </td>
+                <td>{{ user.createdAt ? user.createdAt|date('F j, Y') : 'N/A' }}</td>
+                <td>
+                    <div class="actions">
+
+                        <a href="{{ path('staff_edit', {id: user.id}) }}"
+                           class="btn edit-btn">
+                           Edit
+                        </a>
+
+                        <form method="post"
+                              action="{{ path('staff_delete', {id: user.id}) }}"
+                              onsubmit="return confirm('Delete this user?');">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('delete' ~ user.id) }}">
+                            <button class="btn delete-btn">Delete</button>
+                        </form>
+
+                        {# ✅ FIXED ENABLE / DISABLE TOGGLE (POST + CSRF) #}
+                        <form method="post"
+                              action="{{ path('staff_toggle_status', {id: user.id}) }}"
+                              onsubmit="return confirm('Change staff status?');">
+
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('toggle_status_' ~ user.id) }}">
+
+                            <button class="btn {{ user.isActive ? 'delete-btn' : 'edit-btn' }}">
+                                {{ user.isActive ? 'Disable' : 'Enable' }}
+                            </button>
+                        </form>
+
+                    </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center;">
+                    No staff found.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

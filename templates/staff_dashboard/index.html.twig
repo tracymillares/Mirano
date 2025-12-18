@@ -1,20 +1,113 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello StaffDashboardController!{% endblock %}
+{% block title %}Staff Dashboard{% endblock %}
 
 {% block body %}
+{% include 'layouts/sidebar_staff.html.twig' %}
+
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+/* 🌿 BASE */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff8f5;
+  color: #5D2913;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* 🍽 DASHBOARD */
+.dashboard {
+  padding: 6rem 2rem;
+  text-align: center;
+  transition: filter 0.3s ease;
+}
+
+.dashboard h1 {
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  color: #5D2913;
+}
+
+/* 🧱 CARDS GRID */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* 📦 CARD */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #f3e0d6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.15);
+}
+
+.card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+/* 🔢 COUNT */
+.count {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #b23a48;
+  margin-bottom: 1.5rem;
+}
+
+/* 🔘 BUTTON */
+.manage-btn {
+  display: inline-block;
+  background-color: #5D2913;
+  color: #FFFFD1;
+  text-decoration: none;
+  padding: 0.75rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.manage-btn:hover {
+  background-color: #7e3b1b;
+  transform: translateY(-2px);
+}
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<!-- 🍽 STAFF DASHBOARD -->
+<section class="dashboard" id="staffDashboard">
+  <h1>🍽️ Mirano Staff Dashboard</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/hpi56th/Documents/webdev/webdev/src/Controller/StaffDashboardController.php</code></li>
-        <li>Your template at <code>C:/Users/hpi56th/Documents/webdev/webdev/templates/staff_dashboard/index.html.twig</code></li>
-    </ul>
-</div>
+  <div class="cards">
+
+    <!-- 🧾 ORDERS -->
+    <div class="card">
+      <h2>My Orders</h2>
+      <div class="count">{{ totalOrders }}</div>
+      <a href="{{ path('staff_records_index') }}" class="manage-btn">
+        View Orders
+      </a>
+    </div>
+
+    <!-- 📅 RESERVATIONS -->
+    <div class="card">
+      <h2>My Reservations</h2>
+      <div class="count">{{ totalReservations }}</div>
+      <a href="{{ path('staff_records_index') }}" class="manage-btn">
+        View Reservations
+      </a>
+    </div>
+
+  </div>
+</section>
 {% endblock %}

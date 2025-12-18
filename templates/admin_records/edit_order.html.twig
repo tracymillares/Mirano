@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Order{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar.html.twig' %}
+
+<style>
+/* General Body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fef8f2;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container to account for sidebar */
+.content-container {
+    margin-left: 260px; /* sidebar width */
+    padding: 2rem;
+}
+
+/* Heading */
+h1 {
+    color: #b23a48;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Form Card */
+.form-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #5D2913;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #f1d2c0;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Submit Button */
+.action-btn {
+    padding: 0.5rem 1rem;
+    background-color: #b23a48;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #8e2f3a;
+}
+
+/* Flash messages */
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-container {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}
+</style>
+
+<div class="content-container">
+    <h1>Edit Order #{{ order.id }}</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="form-card">
+        {{ form_start(form) }}
+
+        {# Render each field individually for styling control #}
+        {% for child in form %}
+            <div class="form-group">
+                {{ form_label(child) }}
+                {{ form_widget(child) }}
+                {{ form_errors(child) }}
+            </div>
+        {% endfor %}
+
+        {# Only one submit button, styled #}
+        <button type="submit" class="action-btn">Save Changes</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

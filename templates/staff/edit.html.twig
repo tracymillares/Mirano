@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Staff{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        text-align: center;
+        position: relative;
+    }
+
+    .modal h1 {
+        color: #b23a48;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 0.95rem;
+    }
+
+    .btn {
+        background-color: #b23a48;
+        color: #fff8f5;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.2s;
+        margin-top: 0.5rem;
+    }
+
+    .btn:hover {
+        background-color: #7e3b1b;
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        margin-top: 1rem;
+        display: block;
+        text-decoration: none;
+        color: #5D2913;
+        font-weight: 600;
+    }
+</style>
+
+<div class="modal-overlay">
+    <div class="modal">
+
+        <h1>Edit Staff</h1>
+
+        {{ form_start(form) }}
+
+            {{ form_row(form.username, {'attr': {'class': 'form-control'}}) }}
+            {{ form_row(form.roles, {'attr': {'class': 'form-control'}}) }}
+
+            {# Password field is optional on edit #}
+            {{ form_row(form.plainPassword, {
+                'attr': {'class': 'form-control'},
+                'label': 'Password',
+            }) }}
+
+            <button type="submit" class="btn">Update Staff</button>
+
+        {{ form_end(form) }}
+
+        <a href="{{ path('staff_index') }}" class="back-link">← Back to Staff List</a>
+    </div>
+</div>
+{% endblock %}

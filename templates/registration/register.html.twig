@@ -3,6 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+
 <style>
     body {
         font-family: 'Poppins', sans-serif;
@@ -57,11 +58,29 @@
         cursor: pointer;
         width: 100%;
         transition: 0.2s;
+        margin-bottom: 1rem; /* Added margin for spacing */
     }
 
     .btn:hover {
         background-color: #7e3b1b;
         transform: translateY(-2px);
+    }
+
+    /* Added styling for the login link */
+    .login-footer {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .login-footer a {
+        color: #b23a48;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .login-footer a:hover {
+        text-decoration: underline;
     }
 
     .alert {
@@ -98,6 +117,10 @@
 
             <button type="submit" class="btn">Register</button>
         {{ form_end(registrationForm) }}
+
+        <div class="login-footer">
+            Already have an account? <a href="{{ path('app_login') }}">Log in here</a>
+        </div>
     </div>
 </div>
 {% endblock %}

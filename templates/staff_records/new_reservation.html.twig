@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Reservation{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar_staff.html.twig' %}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff8f5; /* Uniform background color */
+        color: #5D2913; /* Primary text color */
+        margin: 0;
+        padding: 0 2rem 2rem 2rem;
+        padding-top: 60px; /* Space for fixed navbar */
+    }
+
+    .content-container {
+        margin-left: 260px; /* sidebar width */
+        padding: 0;
+        max-width: 900px;
+        margin: 0 auto;
+        padding-top: 1rem;
+    }
+    
+    /* Added form card wrapper for compact look */
+    .form-card {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        max-width: 600px; /* Make the card compact */
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-family: 'Merriweather', serif;
+        color: #b23a48;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .flash-success {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.3rem;
+        color: #5D2913;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 8px;
+        border: 1px solid #f3e0d6; /* Uniform border color */
+        font-size: 0.95rem;
+        box-sizing: border-box; /* Ensures padding doesn't increase width */
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #b23a48;
+        outline: none;
+    }
+
+    button.btn {
+        background-color: #b23a48;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+        width: 100%; /* Make button full width of the card */
+        margin-top: 1rem;
+    }
+
+    button.btn:hover {
+        background-color: #7e3b1b;
+    }
+</style>
+
+<div class="content-container">
+    <h1>Create New Reservation</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    <div class="form-card">
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.guest) }}
+            {{ form_widget(form.guest) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date) }}
+        </div>
+        
+        {# Moved the Menu field here as requested #}
+        {% if form.menu is defined %}
+        <div class="form-group">
+            {{ form_label(form.menu) }}
+            {{ form_widget(form.menu) }}
+        </div>
+        {% endif %}
+
+        <div class="form-group">
+            {{ form_label(form.message) }}
+            {{ form_widget(form.message) }}
+        </div>
+
+        <button type="submit" class="btn">Submit Reservation</button>
+
+        {{ form_end(form) }}
+    </div>
+
+</div>
+
+{% endblock %}

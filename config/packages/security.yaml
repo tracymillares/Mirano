@@ -24,7 +24,7 @@ security:
                 always_use_default_target_path: false
             logout:
                 path: app_logout
-                target: /
+                target: /mirano 
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }

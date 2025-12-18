@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block body %}
+
+{% include 'layouts/sidebar_staff.html.twig' %}
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fef8f2;
+    margin: 0;
+    padding: 0;
+    /* Adding padding-top to the body ensures content starts below the fixed top bar */
+    padding-top: 60px; /* Adjust this value if your top navbar is taller or shorter */
+}
+
+.dashboard-container {
+    /* If your sidebar is fixed, ensure you still have margin for it */
+    margin-left: 240px; 
+    padding: 2rem;
+    /* Removed padding-top here as body padding handles the overlap */
+}
+
+h1 {
+    color: #b23a48;
+    font-size: 1.8rem;
+    /* Added margin-top to the h1 for better spacing once the container moves down */
+    margin-top: 0; 
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #b23a48;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 0.5rem;
+}
+</style>
+
+<div class="dashboard-container">
+    <h1>Welcome, {{ user.username }}!</h1>
+
+    <div class="dashboard-card">
+        <h2>Profile Information</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Role:</strong> {{ user.roles|join(', ') }}</p>
+        <p><strong>Status:</strong> {{ user.isActive ? 'Active' : 'Disabled' }}</p>
+        <p><strong>Date Created:</strong> {{ user.createdAt ? user.createdAt|date('F j, Y') : 'N/A' }}</p>
+        <a href="{{ path('staff_change_password') }}" class="btn">Change Password</a>
+    </div>
+
+  </div>
+
+{% endblock %}

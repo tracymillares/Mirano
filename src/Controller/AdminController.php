@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\ActivityLogger;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
@@ -28,10 +29,11 @@ class AdminController extends AbstractController
 
     #[Route('/change-password', name: 'app_admin_change_password')]
     public function changePassword(
-        Request $request,
-        UserPasswordHasherInterface $hasher,
-        EntityManagerInterface $em
-    ): Response {
+    Request $request,
+    UserPasswordHasherInterface $hasher,
+    EntityManagerInterface $em,
+    ActivityLogger $activityLogger
+): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         /** @var \App\Entity\User $user */
@@ -43,19 +45,20 @@ class AdminController extends AbstractController
         }
 
         $form = $this->createForm(PasswordChangeType::class);
-        $form->handleRequest($request);
+$form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $hasher->hashPassword($user, $form->get('plainPassword')->getData())
-            );
-            $em->flush();
+if ($form->isSubmitted() && $form->isValid()) {
+    $user->setPassword(
+        $hasher->hashPassword($user, $form->get('plainPassword')->getData())
+    );
+    $em->flush();
 
-            $this->addFlash('success', 'Password updated successfully!');
-            return $this->redirectToRoute('app_admin_profile');
-        }
+    $this->addFlash('success', 'Password updated successfully!');
+    return $this->redirectToRoute('app_admin_profile');
+}
 
-        return $this->render('admin/change_password.html.twig', [
+
+        return $this->render('password_change/change_password.html.twig', [
             'passwordForm' => $form->createView()
         ]);
     }

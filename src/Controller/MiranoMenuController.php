@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\ActivityLogger;
+
 
 #[Route('/mirano/menu')]
 final class MiranoMenuController extends AbstractController
@@ -27,7 +29,7 @@ final class MiranoMenuController extends AbstractController
     }
 
     #[Route('/new', name: 'app_mirano_menu_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger, ActivityLogger $activityLogger): Response
     {
         $menu = new Menu();
         $form = $this->createForm(MenuType::class, $menu);

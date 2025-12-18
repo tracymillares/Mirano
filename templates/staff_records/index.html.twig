@@ -1,0 +1,229 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Staff Records{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar_staff.html.twig' %}
+
+<style>
+/* General Body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5; /* Uniform background color */
+    color: #5D2913; /* Primary text color */
+    margin: 0;
+    padding: 0 2rem 2rem 2rem;
+    padding-top: 60px; /* Added padding-top to give space for the fixed top bar */
+}
+
+/* Container to account for sidebar */
+.content-container {
+    /* Keeping margin-left for fixed sidebar, but adjusting padding */
+    margin-left: 260px; 
+    padding: 0; /* Removed padding here as body padding handles the overlap */
+    max-width: 1200px; /* Optional max width */
+}
+
+/* Headings */
+h1 {
+    font-family: 'Merriweather', serif; /* Uniform title font */
+    color: #b23a48; /* Accent color for titles */
+    font-size: 2rem;
+    margin-top: 1rem; /* Adjusted margin-top for spacing */
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+h2 {
+    color: #5D2913;
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #f3e0d6; /* Softer border color */
+    padding-bottom: 0.3rem;
+}
+
+/* Flash messages */
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 8px; /* Uniform radius */
+    margin-bottom: 1rem;
+    border-left: 5px solid #28a745;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.edit-link, button {
+    padding: 0.4rem 0.8rem; /* Standardized button size */
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.edit-link {
+    background-color: #5D2913;
+    color: #fff;
+}
+
+.edit-link:hover {
+    background-color: #3e1b0d;
+    transform: translateY(-1px);
+}
+
+button {
+    background-color: #b23a48;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #92283c;
+    transform: translateY(-1px);
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border-radius: 12px; /* Uniform radius */
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Uniform shadow */
+}
+
+thead {
+    background-color: #5D2913; /* Uniform header color */
+    color: #FFFFD1; /* Uniform header text color */
+}
+
+th, td {
+    padding: 0.8rem 1rem; /* Standardized padding */
+    text-align: left;
+    border-bottom: 1px solid #f3e0d6; /* Uniform border color */
+}
+
+tbody tr:hover {
+    background-color: #fff2eb; /* Uniform hover color */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-container {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+<div class="content-container">
+    <h1>Your Records</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    {# ORDERS TABLE #}
+    <h2>Orders</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Menu</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customerName }}</td>
+                <td>{{ order.customerEmail }}</td>
+                <td>{{ order.phone }}</td>
+                <td>{{ order.menu.name }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>₱{{ order.totalPrice|number_format(2) }}</td>
+                <td>{{ order.status }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ path('staff_order_edit', {'id': order.id}) }}" class="edit-link">Edit</a>
+
+                        <form method="post"
+                              action="{{ path('staff_order_delete', {'id': order.id}) }}"
+                              onsubmit="return confirm('Delete this order?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_order' ~ order.id) }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="9">No orders found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {# RESERVATIONS TABLE #}
+    <h2>Reservations</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Guests</th>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Actions</th>
+            </tr>
+</thead>
+        <tbody>
+            {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.name }}</td>
+                <td>{{ reservation.email }}</td>
+                <td>{{ reservation.phone }}</td>
+                <td>{{ reservation.guest }}</td>
+                <td>{{ reservation.date|date('Y-m-d H:i') }}</td>
+                <td>{{ reservation.message }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{{ path('staff_reservation_edit', {'id': reservation.id}) }}" class="edit-link">Edit</a>
+
+                        <form method="post"
+                              action="{{ path('staff_reservation_delete', {'id': reservation.id}) }}"
+                              onsubmit="return confirm('Delete this reservation?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_reservation' ~ reservation.id) }}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8">No reservations found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

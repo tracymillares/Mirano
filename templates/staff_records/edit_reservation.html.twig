@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Reservation{% endblock %}
+
+{% block body %}
+{% include 'layouts/sidebar_staff.html.twig' %}
+
+<style>
+/* Body and Form */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fef8f2;
+    margin: 0;
+    padding: 0;
+}
+
+.content-container {
+    margin-left: 260px; /* width of sidebar */
+    padding: 2rem;
+}
+
+h1 {
+    color: #b23a48;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #5D2913;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #f1d2c0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button.action-btn {
+    padding: 0.7rem 1.4rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+    background-color: #b23a48;
+    color: #fff;
+    transition: 0.2s;
+}
+
+button.action-btn:hover {
+    background-color: #8e2f3a;
+}
+
+/* Flash messages */
+.flash-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+</style>
+
+<div class="content-container">
+    <h1>Edit Reservation #{{ reservation.id }}</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="flash-success">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name) }}
+            {{ form_errors(form.name) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.phone) }}
+            {{ form_widget(form.phone) }}
+            {{ form_errors(form.phone) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.guest) }}
+            {{ form_widget(form.guest) }}
+            {{ form_errors(form.guest) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.date) }}
+            {{ form_widget(form.date) }}
+            {{ form_errors(form.date) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.menu, 'Menu Items') }}
+            {{ form_widget(form.menu) }}
+            {{ form_errors(form.menu) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.message) }}
+            {{ form_widget(form.message) }}
+            {{ form_errors(form.message) }}
+        </div>
+
+        {# Optional: Status field if staff can update it #}
+
+        <button type="submit" class="action-btn">Save</button>
+
+    {{ form_end(form) }}
+</div>
+
+{% endblock %}

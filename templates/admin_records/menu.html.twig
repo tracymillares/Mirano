@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Staff Menu{% endblock %}
+
+{% block body %}
+
+{% include 'layouts/sidebar.html.twig' %}
+
+<div class="menu-container">
+    <h1>Admin Menu</h1>
+    <p>Select a menu item to create an order.</p>
+
+    <div class="menu-grid">
+        {% for menu in menus %}
+            <div class="menu-card">
+                <h3>{{ menu.name }}</h3>
+                <p>₱{{ menu.price|number_format(2, '.', ',') }}</p>
+
+                <a href="{{ path('admin_new_order', { id: menu.id }) }}"
+                   class="order-btn">
+                    Add Order
+                </a>
+            </div>
+        {% else %}
+            <p>No menu items available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.menu-container {
+    max-width: 900px;
+    /* Added padding-top to push content below the fixed navbar */
+    padding-top: 60px; 
+    margin: 3rem auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Added margin-top to the H1 to give some breathing room */
+.menu-container h1 {
+    margin-top: 1rem;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.menu-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.order-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #b23a48;
+    color: #fff;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.order-btn:hover {
+    background: #92283c;
+}
+</style>
+{% endblock %}
